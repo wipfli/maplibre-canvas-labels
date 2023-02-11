@@ -14,6 +14,10 @@ Quite slow to load, a bit an ugly solution producing many console errors, but th
 
 Hindi: https://wipfli.github.io/maplibre-canvas-labels#lanugage=hi
 Tegulu: https://wipfli.github.io/maplibre-canvas-labels#language=te
+Bengali: https://wipfli.github.io/maplibre-canvas-labels#language=bn
+Gujarati: https://wipfli.github.io/maplibre-canvas-labels#language=gu
+Malayalam: https://wipfli.github.io/maplibre-canvas-labels#language=ml
+Punjabi: https://wipfli.github.io/maplibre-canvas-labels#language=pa
 
 ## Try out locally
 
