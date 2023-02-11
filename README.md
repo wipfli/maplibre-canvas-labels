@@ -12,6 +12,9 @@ Quite slow to load, a bit an ugly solution producing many console errors, but th
 
 </a>
 
+Hindi: https://wipfli.github.io/maplibre-canvas-labels#lanugage=hi
+Tegulu: https://wipfli.github.io/maplibre-canvas-labels#language=te
+
 ## Try out locally
 
 Map tiles from swiss-map.cc have cors for `localhost:3000`, so if you want to try this out locally, serve `index.html` at port 3000 for example with:
