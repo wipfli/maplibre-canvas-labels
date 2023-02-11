@@ -32,7 +32,7 @@
         var map = new maplibregl.Map({
             container: 'map',
             style: 'https://wipfli.github.io/swiss-map/style.json',
-            hash: true,
+            hash: 'map',
             center: [73.413, 18.92],
             zoom: 7.88
         });
@@ -64,6 +64,16 @@
                 });
         });
 
+        var hash = window.location.hash.substr(1);
+
+        var result = hash.split('&').reduce(function (res, item) {
+            var parts = item.split('=');
+            res[parts[0]] = parts[1];
+            return res;
+        }, {});
+
+        var language = result.language ? result.language : 'hi';
+
         fetch('cities.geojson')
             .then((response) => response.json())
             .then((data) => {
@@ -78,7 +88,7 @@
                         'type': 'symbol',
                         'source': 'points',
                         'layout': {
-                            'icon-image': ['concat', 'label-', ['get', 'name:hi']]
+                            'icon-image': ['concat', 'label-', ['get', `name:${language}`]]
                         }
                     });
                 });

@@ -16,7 +16,7 @@ Quite slow to load, a bit an ugly solution producing many console errors, but th
 
 Map tiles from swiss-map.cc have cors for `localhost:3000`, so if you want to try this out locally, serve `index.html` at port 3000 for example with:
 
-`npx serve`
+`npx serve .`
 
 ## Base Map Style
 
