@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Generate and add a missing icon to the map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <canvas id='textCanvas' height=20></canvas>
+
+
+    <script>
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://wipfli.github.io/swiss-map/style.json',
+            hash: true,
+            center: [73.413, 18.92],
+            zoom: 7.88
+        });
+
+        var ctx = document.getElementById('textCanvas').getContext('2d'); //Hidden canvas
+
+        map.on('styleimagemissing', function (e) {
+
+            var id = e.id; // id of the missing image
+            console.log(id);
+
+            // check if this missing icon is one this function can generate
+            var prefix = 'label-';
+            if (id.indexOf(prefix) !== 0) return;
+
+            var text = id.slice(prefix.length);
+            var fontSize = 20;
+            ctx.font = `${fontSize}px sans`;
+            ctx.canvas.width = ctx.measureText(text).width;
+            ctx.canvas.height = 1.5 * fontSize;
+            ctx.font = `${fontSize}px sans`;
+            ctx.fillText(text, 0, fontSize);
+
+            map.loadImage(
+                ctx.canvas.toDataURL(),
+                function (error, image) {
+                    if (error) throw error;
+                    map.addImage(id, image);
+                });
+        });
+
+        fetch('cities.geojson')
+            .then((response) => response.json())
+            .then((data) => {
+                map.on('load', function () {
+                    map.addSource('points', {
+                        'type': 'geojson',
+                        'data': data
+                    });
+
+                    map.addLayer({
+                        'id': 'points',
+                        'type': 'symbol',
+                        'source': 'points',
+                        'layout': {
+                            'icon-image': ['concat', 'label-', ['get', 'name:hi']]
+                        }
+                    });
+                });
+            });
+
+    </script>
+
+</body>
+
+</html>
