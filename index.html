@@ -91,27 +91,6 @@
             });
         });
         
-        /*
-        fetch('cities.geojson')
-            .then((response) => response.json())
-            .then((data) => {
-                map.on('load', function () {
-                    map.addSource('points', {
-                        'type': 'geojson',
-                        'data': data
-                    });
-
-                    map.addLayer({
-                        'id': 'points',
-                        'type': 'symbol',
-                        'source': 'points',
-                        'layout': {
-                            'icon-image': ['concat', 'label-', ['get', `name:${language}`]]
-                        }
-                    });
-                });
-            });
-            */
 
     </script>
 
