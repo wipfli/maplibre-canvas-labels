@@ -34,10 +34,15 @@
             style: 'https://wipfli.github.io/swiss-map/style.json',
             hash: 'map',
             center: [73.413, 18.92],
-            zoom: 7.88
-        });
+            zoom: 7.88,
+            attributionControl: false
+        })
+            .addControl(new maplibregl.AttributionControl({
+                compact: true,
+                customAttribution: '<a href="https://github.com/wipfli/maplibre-canvas-labels/">More Languages...</a>'
+            }));
 
-        var ctx = document.getElementById('textCanvas').getContext('2d'); //Hidden canvas
+        var ctx = document.getElementById('textCanvas').getContext('2d', {willReadFrequently: true}); //Hidden canvas
 
         map.on('styleimagemissing', function (e) {
 
@@ -74,6 +79,19 @@
 
         var language = result.language ? result.language : 'hi';
 
+        map.on('load', function() {
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'qrank',
+                'source-layer': 'qrank',
+                'layout': {
+                    'icon-image': ['concat', 'label-', ['get', `name:${language}`]]
+                }
+            });
+        });
+        
+        /*
         fetch('cities.geojson')
             .then((response) => response.json())
             .then((data) => {
@@ -93,6 +111,7 @@
                     });
                 });
             });
+            */
 
     </script>
 

@@ -12,12 +12,15 @@ Quite slow to load, a bit an ugly solution producing many console errors, but th
 
 </a>
 
-Hindi: https://wipfli.github.io/maplibre-canvas-labels#lanugage=hi
-Tegulu: https://wipfli.github.io/maplibre-canvas-labels#language=te
-Bengali: https://wipfli.github.io/maplibre-canvas-labels#language=bn
-Gujarati: https://wipfli.github.io/maplibre-canvas-labels#language=gu
-Malayalam: https://wipfli.github.io/maplibre-canvas-labels#language=ml
-Punjabi: https://wipfli.github.io/maplibre-canvas-labels#language=pa
+## Languages
+
+  * Hindi: https://wipfli.github.io/maplibre-canvas-labels#lanugage=hi
+  * Tegulu: https://wipfli.github.io/maplibre-canvas-labels#language=te
+  * Bengali: https://wipfli.github.io/maplibre-canvas-labels#language=bn
+  * Gujarati: https://wipfli.github.io/maplibre-canvas-labels#language=gu
+  * Malayalam: https://wipfli.github.io/maplibre-canvas-labels#language=ml
+  * Punjabi: https://wipfli.github.io/maplibre-canvas-labels#language=pa
+  * Any other that is in OpenStreetMap... https://wiki.openstreetmap.org/wiki/Multilingual_names
 
 ## Try out locally
 
