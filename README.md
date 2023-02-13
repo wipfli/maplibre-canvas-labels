@@ -1,6 +1,6 @@
 # MapLibre Canvas Labels
 
-Proof-of-concept to render Hindi text labels in a `canvas` and copying the resulting image to a MapLibre map.
+Proof-of-concept to render Hindi text labels ~~in a `canvas`~~ with [TinySDF](https://github.com/mapbox/tiny-sdf) and copying the resulting image to a MapLibre map.
 
 Quite slow to load, a bit an ugly solution producing many console errors, but the result still looks OK I find...
 
