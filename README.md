@@ -20,6 +20,10 @@ Quite slow to load, a bit an ugly solution producing many console errors, but th
   * Gujarati: https://wipfli.github.io/maplibre-canvas-labels#language=gu
   * Malayalam: https://wipfli.github.io/maplibre-canvas-labels#language=ml
   * Punjabi: https://wipfli.github.io/maplibre-canvas-labels#language=pa
+  * Marathi: https://wipfli.github.io/maplibre-canvas-labels#language=mr
+  * Urdu: https://wipfli.github.io/maplibre-canvas-labels#language=ur
+  * Persian: https://wipfli.github.io/maplibre-canvas-labels#language=fa
+  * Arabic: https://wipfli.github.io/maplibre-canvas-labels#language=ar
   * Any other that is in OpenStreetMap... https://wiki.openstreetmap.org/wiki/Multilingual_names
 
 ## Try out locally
