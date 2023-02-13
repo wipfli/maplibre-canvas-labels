@@ -28,7 +28,9 @@
     <canvas id='textCanvas' height=20></canvas>
 
 
-    <script>
+    <script type="module">
+        import TinySDF from 'https://cdn.skypack.dev/@mapbox/tiny-sdf';
+
         var map = new maplibregl.Map({
             container: 'map',
             style: 'https://wipfli.github.io/swiss-map/style.json',
@@ -42,7 +44,17 @@
                 customAttribution: '<a href="https://github.com/wipfli/maplibre-canvas-labels/">More Languages...</a>'
             }));
 
-        var ctx = document.getElementById('textCanvas').getContext('2d', {willReadFrequently: true}); //Hidden canvas
+        var ctx = document.getElementById('textCanvas').getContext('2d', { willReadFrequently: true }); //Hidden canvas
+
+        const tinySdf = new TinySDF({
+            fontSize: 18,             // Font size in pixels
+            fontFamily: 'sans-serif', // CSS font-family
+            fontWeight: 'normal',     // CSS font-weight
+            fontStyle: 'normal',      // CSS font-style
+            buffer: 30,                // Whitespace buffer around a glyph in pixels
+            radius: 8,                // How many pixels around the glyph shape to use for encoding distance
+            cutoff: 0.25              // How much of the radius (relative) is used for the inside part of the glyph
+        });
 
         map.on('styleimagemissing', function (e) {
 
@@ -52,21 +64,28 @@
             // check if this missing icon is one this function can generate
             var prefix = 'label-';
             if (id.indexOf(prefix) !== 0) return;
+            if (id.length === prefix.length) return;
 
             var text = id.slice(prefix.length);
-            var fontSize = 20;
-            ctx.font = `${fontSize}px sans`;
-            ctx.canvas.width = ctx.measureText(text).width;
-            ctx.canvas.height = 1.5 * fontSize;
-            ctx.font = `${fontSize}px sans`;
-            ctx.fillText(text, 0, fontSize);
 
-            map.loadImage(
-                ctx.canvas.toDataURL(),
-                function (error, image) {
-                    if (error) throw error;
-                    map.addImage(id, image);
-                });
+            const glyph = tinySdf.draw(text);
+            var data = new Uint8Array(glyph.width * glyph.height * 4);
+            for (var i = 0; i < glyph.width * glyph.height; ++i) {
+                data[4 * i + 0] = 0;
+                data[4 * i + 1] = 0;
+                data[4 * i + 2] = 0;
+                data[4 * i + 3] = glyph.data[i];
+            }
+            map.addImage(id,
+                {
+                    data,
+                    width: glyph.width,
+                    height: glyph.height
+                },
+                {
+                    sdf: true
+                }
+            )
         });
 
         var hash = window.location.hash.substr(1);
@@ -79,7 +98,7 @@
 
         var language = result.language ? result.language : 'hi';
 
-        map.on('load', function() {
+        map.on('load', function () {
             map.addLayer({
                 'id': 'points',
                 'type': 'symbol',
@@ -87,10 +106,13 @@
                 'source-layer': 'qrank',
                 'layout': {
                     'icon-image': ['concat', 'label-', ['get', `name:${language}`]]
+                },
+                'paint': {
+                    "icon-halo-color": "white",
+                    'icon-halo-width': 1.5
                 }
             });
         });
-        
 
     </script>
 
