@@ -35,6 +35,7 @@
 
     <script type="module">
 
+        const canvas = document.createElement('canvas');
         const INF = 1e20;
         export default class TinySDF {
             constructor({
@@ -56,7 +57,8 @@
                 // for "halo", and account for some glyphs possibly being larger than their font size
                 const size = this.size = text.length * fontSize + buffer * 4;
 
-                const canvas = this._createCanvas(size);
+                //const canvas = this._createCanvas(size);
+                canvas.width = canvas.height = size;
                 const ctx = this.ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.font = `${fontStyle} ${fontWeight} ${fontSize}px ${fontFamily}`;
 
@@ -72,11 +74,11 @@
                 this.v = new Uint16Array(size);
             }
 
-            _createCanvas(size) {
-                const canvas = document.createElement('canvas');
-                canvas.width = canvas.height = size;
-                return canvas;
-            }
+            //_createCanvas(size) {
+            //    const canvas = document.createElement('canvas');
+            //    canvas.width = canvas.height = size;
+            //    return canvas;
+            //}
 
             draw() {
                 var char = this.text;
