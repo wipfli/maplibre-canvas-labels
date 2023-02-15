@@ -2,11 +2,11 @@
 
 Proof-of-concept to render Hindi text labels ~~in a `canvas`~~ with [TinySDF](https://github.com/mapbox/tiny-sdf) and copying the resulting image to a MapLibre map.
 
-Quite slow to load, a bit an ugly solution producing many console errors, but the result still looks OK I find...
+Quite slow to load, a bit an ugly solution, text not totally crisp, but the result still looks OK I find...
 
 ## Demo
 
-<a href="https://wipfli.github.io/maplibre-canvas-labels">
+<a href="https://wipfli.github.io/maplibre-canvas-labels#language=hi">
 
 <img src="screenshot.png" width=450>
 
@@ -25,6 +25,8 @@ Quite slow to load, a bit an ugly solution producing many console errors, but th
   * Persian: https://wipfli.github.io/maplibre-canvas-labels#language=fa
   * Arabic: https://wipfli.github.io/maplibre-canvas-labels#language=ar
   * Any other that is in OpenStreetMap... https://wiki.openstreetmap.org/wiki/Multilingual_names
+
+If you don't specify a language in the URL, the map shows the OpenStreetMap `name` tag value. This looks especially beautiful in [South-East Asia](https://wipfli.github.io/maplibre-canvas-labels/#map=5.64/14.953/102.901).
 
 ## Try out locally
 
