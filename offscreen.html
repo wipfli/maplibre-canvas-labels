@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>MapLibre OffscreenCanvas Labels</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="map"></div>
+    <script>
+
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://wipfli.github.io/swiss-map/style.json',
+            hash: 'map',
+            center: [73.413, 18.92],
+            zoom: 7.88,
+            attributionControl: false
+        })
+            .addControl(new maplibregl.AttributionControl({
+                compact: true,
+                customAttribution: '<a href="https://github.com/wipfli/maplibre-canvas-labels/">More Languages...</a>'
+            }));
+
+        // var htmlCanvas = document.getElementById('canvas');
+        // var offscreen = htmlCanvas.transferControlToOffscreen();
+        var w = new Worker('./offscreen_worker.js');
+        // pass canvas into webworker, so we can do all rendering inside it
+        //w.postMessage({ canvas: offscreen }, [offscreen]);
+
+        var requestedLabels = [];
+
+        map.on('styleimagemissing', function (e) {
+
+            var id = e.id; // id of the missing image
+            console.log(id);
+
+            // check if this missing icon is one this function can generate
+            var prefix = 'label-';
+            if (id.indexOf(prefix) !== 0) return;
+            if (id.length === prefix.length) return;
+
+
+            var text = id.slice(prefix.length);
+
+            if (requestedLabels.includes(text)) return;
+
+            requestedLabels.push(text);
+
+            /*
+            const tinySdf = new TinySDF({
+                fontSize: 34,             // Font size in pixels
+                fontFamily: 'sans-serif', // CSS font-family
+                fontWeight: 'normal',     // CSS font-weight
+                fontStyle: 'normal',      // CSS font-style
+                buffer: 5,                // Whitespace buffer around a glyph in pixels
+                radius: 8,                // How many pixels around the glyph shape to use for encoding distance
+                cutoff: 0.25,              // How much of the radius (relative) is used for the inside part of the glyph
+                text: text
+            });
+
+            const glyph = tinySdf.draw();
+            var data = new Uint8Array(glyph.width * glyph.height * 4);
+            for (var i = 0; i < glyph.width * glyph.height; ++i) {
+                data[4 * i + 0] = 0;
+                data[4 * i + 1] = 0;
+                data[4 * i + 2] = 0;
+                data[4 * i + 3] = glyph.data[i];
+            }
+            */
+
+            w.postMessage({ text: text }, []);
+            w.onmessage = (e) => {
+                map.addImage(`${prefix}${e.data.text}`,
+                    e.data,
+                    {
+                        sdf: true
+                    }
+                );
+            };
+
+
+        });
+
+        var hash = window.location.hash.substr(1);
+
+        var result = hash.split('&').reduce(function (res, item) {
+            var parts = item.split('=');
+            res[parts[0]] = parts[1];
+            return res;
+        }, {});
+
+        map.on('load', function () {
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'qrank',
+                'source-layer': 'qrank',
+                'layout': {
+                    'icon-image': ['concat', 'label-', ['get', `name`]],
+                    "icon-size": 0.5
+                },
+                'paint': {
+                    "icon-halo-color": "white",
+                    "icon-halo-width": 1.5
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
