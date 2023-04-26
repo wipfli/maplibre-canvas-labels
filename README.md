@@ -12,6 +12,10 @@ Quite slow to load, a bit an ugly solution, text not totally crisp, but the resu
 
 </a>
 
+## Offscreen Canvas
+
+https://wipfli.github.io/maplibre-canvas-labels/offscreen
+
 ## Languages
 
   * Hindi: https://wipfli.github.io/maplibre-canvas-labels#lanugage=hi
