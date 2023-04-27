@@ -31,8 +31,8 @@
             container: 'map',
             style: 'https://wipfli.github.io/swiss-map/style.json',
             hash: 'map',
-            center: [73.413, 18.92],
-            zoom: 7.88,
+            center: [90.3860339, 23.753485],
+            zoom: 14,
             attributionControl: false
         })
             .addControl(new maplibregl.AttributionControl({
@@ -51,7 +51,7 @@
         map.on('styleimagemissing', function (e) {
 
             var id = e.id; // id of the missing image
-            console.log(id);
+            //console.log(id);
 
             // check if this missing icon is one this function can generate
             var prefix = 'label-';
@@ -401,36 +401,32 @@
                     "icon-halo-width": 1.5,
                 }
             });
-            // map.addLayer({
-            //     'id': 'points',
-            //     'type': 'symbol',
-            //     'source': 'qrank',
-            //     'source-layer': 'qrank',
-            //     //'filter': ["!", ['is-supported-script', ['get', 'name']]],
-            //     'layout': {
-            //         'icon-image': ['concat', 'label-', ['get', 'name']],
-            //         "icon-size": 0.5,
-            //         'symbol-sort-key': [
-            //             "-",
-            //             [
-            //                 "to-number",
-            //                 [
-            //                     "get",
-            //                     "@qrank"
-            //                 ]
-            //             ]
-            //         ],
-            //         'text-field': ['get', 'name:en'],
-            //         'text-font': ['Fira Sans Regular'],
-            //         'icon-offset': [0, 50]
-            //     },
-            //     'paint': {
-            //         "icon-halo-color": "white",
-            //         "icon-halo-width": 1.5,
-            //         "text-halo-color": "white",
-            //         "text-halo-width": 1.5
-            //     }
-            // });
+
+
+            fetch('streets.geojson')
+                .then(response => response.json())
+                .then(data => {
+                    map.addSource('streets', {
+                        'type': 'geojson',
+                        'data': data
+                    })
+                    map.addLayer({
+                        'id': 'line-labels',
+                        'type': 'symbol',
+                        'source': 'streets',
+                        'layout': {
+                            'icon-image': ['concat', 'label-', ['get', 'name']],
+                            "icon-size": 0.5,
+                            'text-font': ['Fira Sans Regular'],
+                            'symbol-placement': 'line',
+                            'icon-keep-upright': true
+                        },
+                        'paint': {
+                            "icon-halo-color": "white",
+                            "icon-halo-width": 1.5,
+                        }
+                    });
+                });
         });
 
     </script>
