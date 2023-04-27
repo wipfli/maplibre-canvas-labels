@@ -45,6 +45,9 @@ class TinySDF {
 
     draw() {
         var char = this.text;
+
+        const { ctx, buffer, gridInner, gridOuter } = this;
+
         const {
             width: glyphAdvance,
             actualBoundingBoxAscent,
@@ -53,6 +56,30 @@ class TinySDF {
             actualBoundingBoxRight
         } = this.ctx.measureText(char);
 
+        var parts = char.split('\n');
+        if (parts.length === 2 && parts[1] === parts[0]) {
+            // parts = [parts[0]];
+            parts = [""];
+        }
+
+        if (parts.length === 2) {
+            parts[1] = parts[1].replace(parts[0], '').trim();
+            parts = [parts[1]];
+        }
+
+        var maxWidth = 0;
+        var maxHeight = 0;
+
+        for (var part of parts) {
+            var measure = ctx.measureText(part);
+            var actualHeight = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
+            if (measure.width > maxWidth) maxWidth = measure.width;
+            if (actualHeight > maxHeight) maxHeight = actualHeight;
+        }
+
+        maxWidth = Math.ceil(maxWidth);
+        maxHeight = Math.ceil(maxHeight);
+
         // The integer/pixel part of the top alignment is encoded in metrics.glyphTop
         // The remainder is implicitly encoded in the rasterization
         const glyphTop = Math.ceil(actualBoundingBoxAscent);
@@ -60,7 +87,8 @@ class TinySDF {
 
         // If the glyph overflows the canvas size, it will be clipped at the bottom/right
         const glyphWidth = Math.max(0, Math.min(this.size - this.buffer, Math.ceil(actualBoundingBoxRight - actualBoundingBoxLeft)));
-        const glyphHeight = Math.min(this.size - this.buffer, glyphTop + Math.ceil(actualBoundingBoxDescent));
+        const lineSpacing = 10;
+        const glyphHeight = parts.length * (maxHeight + lineSpacing); // Math.min(this.size - this.buffer, glyphTop + Math.ceil(actualBoundingBoxDescent)) + 60;
 
         const width = glyphWidth + 2 * this.buffer;
         const height = glyphHeight + 2 * this.buffer;
@@ -70,9 +98,15 @@ class TinySDF {
         const glyph = { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance };
         if (glyphWidth === 0 || glyphHeight === 0) return glyph;
 
-        const { ctx, buffer, gridInner, gridOuter } = this;
-        ctx.clearRect(buffer, buffer, glyphWidth, glyphHeight);
-        ctx.fillText(char, buffer, buffer + glyphTop);
+        //ctx.clearRect(buffer, buffer, ctx, glyphHeight);
+
+        ctx.clearRect(buffer, buffer, ctx, maxHeight);
+
+        //console.log('maxHeight', maxHeight)
+        for (var i =0; i< parts.length; ++i) {
+            ctx.fillText(parts[i], buffer, buffer + glyphTop + (maxHeight + lineSpacing) * i);
+        }
+        
 
         const imgData = ctx.getImageData(buffer, buffer, glyphWidth, glyphHeight);
 

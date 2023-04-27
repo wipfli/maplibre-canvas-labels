@@ -110,19 +110,327 @@
 
         map.on('load', function () {
             map.addLayer({
-                'id': 'points',
-                'type': 'symbol',
-                'source': 'qrank',
-                'source-layer': 'qrank',
-                'layout': {
-                    'icon-image': ['concat', 'label-', ['get', `name`]],
-                    "icon-size": 0.5
+                "id": "labels-2",
+                "type": "symbol",
+                "source": "qrank",
+                "source-layer": "qrank",
+                "layout": {
+                    "text-field": [
+                        "case",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "country"
+                        ],
+                        [
+                            "get",
+                            "name:en"
+                        ],
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "sea"
+                        ],
+                        [
+                            "get",
+                            "name:en"
+                        ],
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "ocean"
+                        ],
+                        [
+                            "get",
+                            "name:en"
+                        ],
+                        [
+                            "get",
+                            "name:en"
+                        ]
+                    ],
+                    "text-size": [
+                        "interpolate",
+                        [
+                            "linear"
+                        ],
+                        [
+                            "zoom"
+                        ],
+                        7,
+                        [
+                            "*",
+                            1.1,
+                            [
+                                "case",
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    10000000
+                                ],
+                                17,
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    1000000
+                                ],
+                                16,
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    100000
+                                ],
+                                14,
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    10000
+                                ],
+                                12,
+                                11
+                            ]
+                        ],
+                        12,
+                        [
+                            "*",
+                            1.5,
+                            [
+                                "case",
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    10000000
+                                ],
+                                17,
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    1000000
+                                ],
+                                16,
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    100000
+                                ],
+                                14,
+                                [
+                                    ">",
+                                    [
+                                        "to-number",
+                                        [
+                                            "get",
+                                            "@qrank"
+                                        ]
+                                    ],
+                                    10000
+                                ],
+                                12,
+                                11
+                            ]
+                        ]
+                    ],
+                    "text-font": [
+                        "Fira Sans Regular"
+                    ],
+                    "visibility": "visible",
+                    "symbol-sort-key": [
+                        "-",
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "@qrank"
+                            ]
+                        ]
+                    ],
+                    'icon-image': ['concat', 'label-', ["case", ["!", ["is-supported-script", ['get', 'name']]], ["get", "name"], ""]],
+                    "icon-size": 0.5,
+                    'icon-offset': [0, 50]
                 },
-                'paint': {
+                "paint": {
+                    "text-color": [
+                        "case",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "natural"
+                            ],
+                            "water"
+                        ],
+                        "#0c7ac3",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "natural"
+                            ],
+                            "bay"
+                        ],
+                        "#0c7ac3",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "sea"
+                        ],
+                        "#0c7ac3",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "ocean"
+                        ],
+                        "#0c7ac3",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "state"
+                        ],
+                        "purple",
+                        [
+                            "has",
+                            "place"
+                        ],
+                        "black",
+                        "gray"
+                    ],
+                    "text-halo-blur": 0,
+                    "text-halo-color": "white",
+                    "text-halo-width": [
+                        "case",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "natural"
+                            ],
+                            "water"
+                        ],
+                        0.0,
+                        [
+                            "==",
+                            [
+                                "get",
+                                "natural"
+                            ],
+                            "bay"
+                        ],
+                        0.0,
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "sea"
+                        ],
+                        0.0,
+                        [
+                            "==",
+                            [
+                                "get",
+                                "place"
+                            ],
+                            "ocean"
+                        ],
+                        0.0,
+                        1.5
+                    ],
+
                     "icon-halo-color": "white",
-                    "icon-halo-width": 1.5
+                    "icon-halo-width": 1.5,
                 }
             });
+            // map.addLayer({
+            //     'id': 'points',
+            //     'type': 'symbol',
+            //     'source': 'qrank',
+            //     'source-layer': 'qrank',
+            //     //'filter': ["!", ['is-supported-script', ['get', 'name']]],
+            //     'layout': {
+            //         'icon-image': ['concat', 'label-', ['get', 'name']],
+            //         "icon-size": 0.5,
+            //         'symbol-sort-key': [
+            //             "-",
+            //             [
+            //                 "to-number",
+            //                 [
+            //                     "get",
+            //                     "@qrank"
+            //                 ]
+            //             ]
+            //         ],
+            //         'text-field': ['get', 'name:en'],
+            //         'text-font': ['Fira Sans Regular'],
+            //         'icon-offset': [0, 50]
+            //     },
+            //     'paint': {
+            //         "icon-halo-color": "white",
+            //         "icon-halo-width": 1.5,
+            //         "text-halo-color": "white",
+            //         "text-halo-width": 1.5
+            //     }
+            // });
         });
 
     </script>
