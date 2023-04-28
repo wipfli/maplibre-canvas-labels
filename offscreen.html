@@ -110,6 +110,44 @@
 
         map.on('load', function () {
             map.addLayer({
+                'id': 'line-labels-swissmap-canvas',
+                'type': 'symbol',
+                'source': 'swissmap',
+                'source-layer': 'highway',
+                'filter': ["!", ["is-supported-script", ['get', 'name']]],
+                'layout': {
+                    'icon-image': ['concat', 'label-', ['get', 'name']],
+                    "icon-size": 0.5,
+                    'text-font': ['Fira Sans Regular'],
+                    'symbol-placement': 'line',
+                    'icon-keep-upright': true
+                },
+                'paint': {
+                    "icon-halo-color": "white",
+                    "icon-halo-width": 1.5,
+                    "icon-color": "#888",
+                }
+            });
+            map.addLayer({
+                'id': 'line-labels-swissmap',
+                'type': 'symbol',
+                'source': 'swissmap',
+                'source-layer': 'highway',
+                'filter': ["is-supported-script", ['get', 'name']],
+                'layout': {
+                    'text-field': ['get', 'name'],
+                    'text-font': ['Fira Sans Regular'],
+                    'symbol-placement': 'line',
+                    'text-keep-upright': true
+                },
+                'paint': {
+                    "text-halo-color": "white",
+                    "text-color": "#888",
+                    "text-halo-width": 1.5,
+                }
+            });
+            
+            map.addLayer({
                 "id": "labels-2",
                 "type": "symbol",
                 "source": "qrank",
@@ -403,31 +441,9 @@
             });
 
 
-            fetch('streets.geojson')
-                .then(response => response.json())
-                .then(data => {
-                    map.addSource('streets', {
-                        'type': 'geojson',
-                        'data': data
-                    })
-                    map.addLayer({
-                        'id': 'line-labels',
-                        'type': 'symbol',
-                        'source': 'streets',
-                        'layout': {
-                            'icon-image': ['concat', 'label-', ['get', 'name']],
-                            "icon-size": 0.5,
-                            'text-font': ['Fira Sans Regular'],
-                            'symbol-placement': 'line',
-                            'icon-keep-upright': true
-                        },
-                        'paint': {
-                            "icon-halo-color": "white",
-                            "icon-halo-width": 1.5,
-                        }
-                    });
-                });
+            
         });
+
 
     </script>
 </body>
